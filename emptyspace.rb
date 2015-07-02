@@ -8,7 +8,12 @@ class EmptySpace
     false
   end
 
-  def color?
+  def color
+    :empty
+  end
+
+  def to_s
+    '  '
   end
 
 end
