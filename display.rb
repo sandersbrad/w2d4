@@ -11,33 +11,10 @@ class Display
     "w" => [-1, 0],
   }
 
-  attr_reader :board, :cursor, :debug_mode
-
   def initialize(board)
     @board = board
     @cursor = [0,0]
     @debug_mode = false
-  end
-
-  def render_squares
-    board.grid.each_with_index do |row, x|
-      row.each_with_index do |tile, y|
-        string = tile.to_s
-        if [x, y] == cursor
-          print string.colorize(:background => :blue)
-        elsif (x.even? && y.even?) || (x.odd? && y.odd?)
-          print string.colorize(:background => :red)
-        else
-          print string.colorize(:background => :black)
-        end
-      end
-      puts
-    end
-    if debug_mode
-      puts "Position: #{cursor}"
-      puts "Possible Steps: #{board[cursor].valid_steps}"
-      puts "Possible Jumps: #{board[cursor].valid_jumps}"
-    end
   end
 
   def select_square
@@ -60,8 +37,28 @@ class Display
     cursor
   end
 
-  def render
+  private
+    attr_reader :board, :cursor, :debug_mode
 
-  end
+    def render_squares
+      board.grid.each_with_index do |row, x|
+        row.each_with_index do |tile, y|
+          string = tile.to_s
+          if [x, y] == cursor
+            print string.colorize(:background => :blue)
+          elsif (x.even? && y.even?) || (x.odd? && y.odd?)
+            print string.colorize(:background => :red)
+          else
+            print string.colorize(:background => :black)
+          end
+        end
+        puts
+      end
+      # if debug_mode
+      #   puts "Position: #{cursor}"
+      #   puts "Possible Steps: #{board[cursor].valid_steps}"
+      #   puts "Possible Jumps: #{board[cursor].valid_jumps}"
+      # end
+    end
 
 end

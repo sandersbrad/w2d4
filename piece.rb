@@ -14,8 +14,7 @@ class Piece
   STEPS_WHITE = [[1, 1],
                  [1, -1]]
 
-  attr_reader :color, :board
-  attr_accessor :position
+  attr_reader :color
 
   def initialize(position, color, board)
     @board = board
@@ -23,7 +22,6 @@ class Piece
     @color = color if color == :white || color == :red
     @king = false
   end
-
 
   def empty?
     false
@@ -41,66 +39,6 @@ class Piece
     end
   end
 
-  def possible_moves(type)
-    x, y = position
-    moves = []
-
-    case color
-    when :red
-      vectors = type == :step ? STEPS_RED : JUMPS_RED
-    when :white
-      vectors = type == :step ? STEPS_WHITE : JUMPS_WHITE
-    end
-
-    if king
-      vectors = STEPS_RED + STEPS_WHITE + JUMPS_RED + JUMPS_WHITE
-    end
-
-    vectors.each do |(dx, dy)|
-      move = [x + dx, y + dy]
-      moves << move if board.on_board?(move)
-    end
-
-    moves
-  end
-
-  def valid_move?(end_pos)
-    total_moves = valid_jumps + valid_steps
-
-    total_moves.include?(end_pos)
-  end
-
-
-  def valid_jumps
-    possible_steps_first = possible_moves(:step)
-    possible_jumps_first = possible_moves(:jump)
-
-    possible_jumps = []
-    possible_steps = []
-
-    possible_jumps_first.each_with_index do |pos, idx|
-      if board.on_board?(pos)
-        possible_jumps << pos
-        possible_steps << possible_steps_first[idx]
-      end
-    end
-
-    jumps = []
-
-    possible_steps.each_with_index do |pos, idx|
-      if board[pos].piece? && board[pos].color != color
-        jumps << possible_jumps[idx]
-      end
-    end
-
-    jumps
-  end
-
-  def valid_steps
-    possible_moves(:step).select { |new_pos| board[new_pos].empty? }
-  end
-
-
   def update_position(new_pos)
     self.position = new_pos
     if color == :red && position[0] == 0
@@ -110,10 +48,70 @@ class Piece
     end
   end
 
+  def valid_move?(end_pos)
+    total_moves = valid_jumps + valid_steps
+
+    total_moves.include?(end_pos)
+  end
+
   private
-    attr_accessor :king
+    attr_reader :board
+    attr_accessor :king, :position
 
     def king_yourself
       self.king = true
+    end
+
+    def possible_moves(type)
+      x, y = position
+      moves = []
+
+      case color
+      when :red
+        vectors = type == :step ? STEPS_RED : JUMPS_RED
+      when :white
+        vectors = type == :step ? STEPS_WHITE : JUMPS_WHITE
+      end
+
+      if king
+        vectors = STEPS_RED + STEPS_WHITE + JUMPS_RED + JUMPS_WHITE
+      end
+
+      vectors.each do |(dx, dy)|
+        move = [x + dx, y + dy]
+        moves << move if board.on_board?(move)
+      end
+
+      moves
+    end
+
+
+    def valid_jumps
+      possible_steps_first = possible_moves(:step)
+      possible_jumps_first = possible_moves(:jump)
+
+      possible_jumps = []
+      possible_steps = []
+
+      possible_jumps_first.each_with_index do |pos, idx|
+        if board.on_board?(pos)
+          possible_jumps << pos
+          possible_steps << possible_steps_first[idx]
+        end
+      end
+
+      jumps = []
+
+      possible_steps.each_with_index do |pos, idx|
+        if board[pos].piece? && board[pos].color != color
+          jumps << possible_jumps[idx]
+        end
+      end
+
+      jumps
+    end
+    
+    def valid_steps
+      possible_moves(:step).select { |new_pos| board[new_pos].empty? }
     end
 end

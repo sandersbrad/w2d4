@@ -4,9 +4,6 @@ require_relative 'display'
 
 
 class Game
-  attr_reader :board, :display, :red, :white
-  attr_accessor :current_player
-
   def initialize
     @board = Board.new
     @display = Display.new(board)
@@ -28,10 +25,14 @@ class Game
     end
   end
 
+  private
 
-  def switch_player
-    self.current_player = current_player == red ? white : red
-  end
+    attr_reader :board, :display, :red, :white
+    attr_accessor :current_player
+
+    def switch_player
+      self.current_player = current_player == red ? white : red
+    end
 end
 
 if __FILE__ == $PROGRAM_NAME
