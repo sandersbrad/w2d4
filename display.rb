@@ -53,6 +53,9 @@ class Display
       delta = WASD[move]
       x, y = cursor
       dx, dy = delta
+      unless board.on_board?([x + dx, y + dy])
+        raise InvalidKey.new "Please stay on the board"
+      end
       @cursor = [x + dx, y + dy]
     end
     cursor

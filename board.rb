@@ -92,4 +92,10 @@ class Board
   def on_board?(pos)
     pos.all? {|coord| coord.between?(0, grid.length - 1)}
   end
+
+  def won?
+    grid.flatten.none? { |piece| piece.color == :red } ||
+    grid.flatten.none? { |piece| piece.color == :white}
+  end
+  
 end

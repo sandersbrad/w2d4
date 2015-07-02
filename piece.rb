@@ -26,9 +26,9 @@ class Piece
     @king = false
   end
 
-  # def king
-  #   self.king == true
-  # end
+  def king_yourself
+    self.king = true
+  end
 
   def empty?
     false
@@ -39,7 +39,11 @@ class Piece
   end
 
   def to_s
-    color == :white ? " \u25cd " : " \u25cf ".colorize(:red)
+    if king
+      color == :white ? "\u25ef  " : "\u2b24  ".colorize(:red)
+    else
+      color == :white ? " \u25cd " : " \u25cf ".colorize(:red)
+    end
   end
 
   def possible_moves(type)
@@ -66,7 +70,6 @@ class Piece
   end
 
 
-  # Need to complete
   def valid_jumps
     possible_steps_first = possible_moves(:step)
     possible_jumps_first = possible_moves(:jump)
@@ -102,6 +105,11 @@ class Piece
 
   def update_position(new_pos)
     self.position = new_pos
+    if color == :red && position[0] == 0
+      king_yourself
+    elsif color == :white && position[0] == 7
+      king_yourself
+    end
   end
 
 end
