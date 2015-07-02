@@ -8,8 +8,8 @@ class Player
   def initialize(name, color, board, display)
     @name, @color = name, color
     @board = board
-    # debugger
     @display = display
+    @captured_pieces = 0
   end
 
   def take_turn

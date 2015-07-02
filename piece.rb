@@ -5,19 +5,17 @@ class Piece
   JUMPS_WHITE = [[2, 2],
                  [2, -2]]
 
-
-  STEPS_WHITE = [[1, 1],
-                 [1, -1]]
+  JUMPS_RED = [[-2, 2],
+               [-2, -2]]
 
   STEPS_RED = [[-1, 1],
                [-1, -1]]
 
-  JUMPS_RED = [[-2, 2],
-               [-2, -2]]
-
+  STEPS_WHITE = [[1, 1],
+                 [1, -1]]
 
   attr_reader :color, :board
-  attr_accessor :position, :king
+  attr_accessor :position
 
   def initialize(position, color, board)
     @board = board
@@ -26,9 +24,6 @@ class Piece
     @king = false
   end
 
-  def king_yourself
-    self.king = true
-  end
 
   def empty?
     false
@@ -69,6 +64,12 @@ class Piece
     moves
   end
 
+  def valid_move?(end_pos)
+    total_moves = valid_jumps + valid_steps
+
+    total_moves.include?(end_pos)
+  end
+
 
   def valid_jumps
     possible_steps_first = possible_moves(:step)
@@ -99,9 +100,6 @@ class Piece
     possible_moves(:step).select { |new_pos| board[new_pos].empty? }
   end
 
-  def opponent(color)
-    color == :white ? :red : :white
-  end
 
   def update_position(new_pos)
     self.position = new_pos
@@ -112,4 +110,10 @@ class Piece
     end
   end
 
+  private
+    attr_accessor :king
+
+    def king_yourself
+      self.king = true
+    end
 end

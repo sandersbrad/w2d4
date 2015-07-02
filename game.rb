@@ -2,6 +2,7 @@ require_relative 'board'
 require_relative 'player'
 require_relative 'display'
 
+
 class Game
   attr_reader :board, :display, :red, :white
   attr_accessor :current_player
@@ -18,10 +19,6 @@ class Game
     until board.won?
       begin
         current_player.take_turn
-      rescue InvalidKey => e
-        puts e.message
-        sleep(1)
-        retry
       rescue InvalidMove => e
         puts e.message
         sleep(1)

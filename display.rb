@@ -9,7 +9,6 @@ class Display
     "s" => [1, 0],
     "d" => [0, 1],
     "w" => [-1, 0],
-    "\r" => [0, 0]
   }
 
   attr_reader :board, :cursor, :debug_mode
@@ -17,7 +16,7 @@ class Display
   def initialize(board)
     @board = board
     @cursor = [0,0]
-    @debug_mode = true
+    @debug_mode = false
   end
 
   def render_squares
@@ -54,7 +53,7 @@ class Display
       x, y = cursor
       dx, dy = delta
       unless board.on_board?([x + dx, y + dy])
-        raise InvalidKey.new "Please stay on the board"
+        raise InvalidMove.new "Please stay on the board"
       end
       @cursor = [x + dx, y + dy]
     end
