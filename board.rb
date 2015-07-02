@@ -1,4 +1,4 @@
-require_relative 'piece'
+# require_relative 'piece'
 require_relative 'emptyspace'
 
 class Board
@@ -30,6 +30,15 @@ class Board
     end
   end
 
+  def move_step
+    start_pos = select_square
+    end_pos = select_square
+
+    current_piece = self[start_pos]
+    self[end_pos] = current_piece
+    self[start_pos] = EmptySpace.new
+  end
+
 
   def setup_board
     [:red, :white].each do |color|
@@ -40,12 +49,12 @@ class Board
 
           if x.even? && y.odd?
             pos = [x, y]
-            self[pos] = Piece.new(pos, color)
+            self[pos] = Piece.new(pos, color, self)
           end
 
           if x.odd? && y.even?
             pos = [x,y]
-            self[pos] = Piece.new(pos, color)
+            self[pos] = Piece.new(pos, color, self)
           end
 
         end

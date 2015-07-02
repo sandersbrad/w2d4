@@ -1,3 +1,5 @@
+require_relative 'board'
+
 class Piece
   JUMPS = [[2, 2],
            [-2, 2],
@@ -9,10 +11,11 @@ class Piece
            [1, -1],
            [-1, -1]]
 
-  attr_reader :color
+  attr_reader :color, :board
   attr_accessor :position
 
-  def initialize(position, color)
+  def initialize(position, color, board)
+    @board = board
     @position = position
     @color = color if color == :white || color == :red
     @king = false
@@ -33,10 +36,10 @@ class Piece
   def possible_moves(type, pos)
     x, y = pos
     moves = []
-    vectors = type == step ? STEPS : JUMPS
+    vectors = type == :step ? STEPS : JUMPS
     vectors.each do |(dx, dy)|
       move = [x + dx, y + dy]
-      moves << move if board.in_bounds?(jump)
+      moves << move if board.on_board?(move)
     end
 
     moves
@@ -44,17 +47,17 @@ class Piece
 
 
   # Need to complete
-  # def valid_jumps(pos, color)
-  #   opponent_pieces = possible_moves(step, pos).select do |new_pos|
-  #     tile = board[new_pos]
-  #     tile.piece? && tile.color != color
-  #   end
-  #
-  #   possible_moves(jump, pos)
-  # end
+  def valid_jumps(pos, color)
+    opponent_pieces = possible_moves(:step, pos).select do |new_pos|
+      tile = board[new_pos]
+      tile.piece? && tile.color != color
+    end
+
+    # possible_moves(jump, pos)
+  end
 
   def valid_steps(pos)
-    possible_moves(step, pos).select { |new_pos| board[new_pos].empty? }
+    possible_moves(:step, pos).select { |new_pos| board[new_pos].empty? }
   end
 
   def opponent(color)
@@ -62,3 +65,6 @@ class Piece
   end
 
 end
+
+board = Board.new
+piece = Piece.new([3,3], :white, board)
