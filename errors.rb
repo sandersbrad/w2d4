@@ -1,0 +1,2 @@
+class InvalidKey < StandardError
+end

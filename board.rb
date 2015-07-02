@@ -55,4 +55,5 @@ class Board
 
   def on_board?(pos)
     pos.all? {|coord| coord.between?(0, grid.length - 1)}
+  end
 end

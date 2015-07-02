@@ -30,23 +30,35 @@ class Piece
     color == :white ? " \u25cd " : " \u25cf ".colorize(:red)
   end
 
-  def possible_jumps(pos)
+  def possible_moves(type, pos)
     x, y = pos
-    jumps = []
-    JUMPS.each do |(dx, dy)|
+    moves = []
+    vectors = type == step ? STEPS : JUMPS
+    vectors.each do |(dx, dy)|
       move = [x + dx, y + dy]
-      possible_jumps << move if board.in_bounds?(move)
+      moves << move if board.in_bounds?(jump)
     end
 
-    jumps    
+    moves
   end
 
-  def valid_jumps(pos)
 
+  # Need to complete
+  # def valid_jumps(pos, color)
+  #   opponent_pieces = possible_moves(step, pos).select do |new_pos|
+  #     tile = board[new_pos]
+  #     tile.piece? && tile.color != color
+  #   end
+  #
+  #   possible_moves(jump, pos)
+  # end
+
+  def valid_steps(pos)
+    possible_moves(step, pos).select { |new_pos| board[new_pos].empty? }
   end
 
-  def valid_steps(position)
-
+  def opponent(color)
+    color == :white ? :red : :white
   end
 
 end
