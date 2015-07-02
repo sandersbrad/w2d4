@@ -39,7 +39,7 @@ class Board
 
     if jump?(start_pos, end_pos)
       remove_piece(start_pos, end_pos)
-      raise InvalidMove.new "Take another turn"
+      raise InvalidMove.new "Take another turn" if current_piece.another_turn?
     end
 
   end

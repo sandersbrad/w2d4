@@ -1,6 +1,3 @@
-require_relative 'board'
-require 'byebug'
-
 class Piece
   JUMPS_WHITE = [[2, 2],
                  [2, -2]]
@@ -54,6 +51,10 @@ class Piece
     total_moves.include?(end_pos)
   end
 
+  def another_turn?
+    valid_jumps.count > 0
+  end
+
   private
     attr_reader :board
     attr_accessor :king, :position
@@ -79,39 +80,29 @@ class Piece
 
       vectors.each do |(dx, dy)|
         move = [x + dx, y + dy]
-        moves << move if board.on_board?(move)
+        moves << move if board.on_board?(move) && board[move].empty?
       end
 
       moves
     end
 
-
     def valid_jumps
-      possible_steps_first = possible_moves(:step)
-      possible_jumps_first = possible_moves(:jump)
+      possible_jumps = possible_moves(:jump)
 
-      possible_jumps = []
-      possible_steps = []
-
-      possible_jumps_first.each_with_index do |pos, idx|
-        if board.on_board?(pos)
-          possible_jumps << pos
-          possible_steps << possible_steps_first[idx]
-        end
-      end
-
-      jumps = []
-
-      possible_steps.each_with_index do |pos, idx|
-        if board[pos].piece? && board[pos].color != color
-          jumps << possible_jumps[idx]
-        end
-      end
-
-      jumps
+      possible_jumps.select { |jump| piece_between?(position, jump)}
     end
-    
+
+    def piece_between?(start_pos, end_pos)
+      x, y = start_pos
+      dx, dy = end_pos
+
+      space = [((x + dx)/2), ((y + dy)/2)]
+      piece = board[space]
+
+      piece.piece? && piece.color != color
+    end
+
     def valid_steps
-      possible_moves(:step).select { |new_pos| board[new_pos].empty? }
+      possible_moves(:step)
     end
 end
