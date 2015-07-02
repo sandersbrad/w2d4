@@ -12,11 +12,12 @@ class Display
     "\r" => [0, 0]
   }
 
-  attr_reader :board, :cursor
+  attr_reader :board, :cursor, :debug_mode
 
   def initialize(board)
     @board = board
     @cursor = [0,0]
+    @debug_mode = true
   end
 
   def render_squares
@@ -33,7 +34,11 @@ class Display
       end
       puts
     end
-    nil
+    if debug_mode
+      puts "Position: #{cursor}"
+      puts "Possible Steps: #{board[cursor].valid_steps}"
+      puts "Possible Jumps: #{board[cursor].valid_jumps}"
+    end
   end
 
   def select_square
@@ -54,21 +59,7 @@ class Display
   end
 
   def render
-    begin
-      system('clear')
-      select_square
-    rescue InvalidKey => e
-      puts e.message
-      sleep(1)
-      retry
-    end
+
   end
 
-end
-
-
-if __FILE__ == $PROGRAM_NAME
-  board = Board.new
-  display = Display.new(board)
-  display.render
 end

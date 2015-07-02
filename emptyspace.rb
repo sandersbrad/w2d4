@@ -16,4 +16,12 @@ class EmptySpace
     '   '
   end
 
+  def valid_steps
+    "empty"
+  end
+
+  def valid_jumps
+    "empty"
+  end
+
 end

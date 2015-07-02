@@ -1,4 +1,4 @@
-# require_relative 'piece'
+require_relative 'piece'
 require_relative 'emptyspace'
 
 class Board
@@ -30,13 +30,40 @@ class Board
     end
   end
 
-  def move_step
-    start_pos = select_square
-    end_pos = select_square
-
+  def move(start_pos, end_pos, color)
     current_piece = self[start_pos]
+
+    if current_piece.color != color
+      raise InvalidMove.new "That is not your piece"
+    end
+
+    unless current_piece.valid_steps.include?(end_pos) ||
+           current_piece.valid_jumps.include?(end_pos)
+
+      raise InvalidMove.new "That is an invalid move"
+    end
+
     self[end_pos] = current_piece
     self[start_pos] = EmptySpace.new
+
+    remove_piece(start_pos, end_pos) if jump?(start_pos, end_pos)
+
+    current_piece.update_position(end_pos)
+  end
+
+  def remove_piece(start_pos, end_pos)
+    x, y = start_pos
+    dx, dy = end_pos
+
+    piece_pos = [((x + dx)/2), ((y + dy)/2)]
+    self[piece_pos] = EmptySpace.new
+  end
+
+  def jump?(start_pos, end_pos)
+    x, y = start_pos
+    dx, dy = end_pos
+
+    [x.abs - dx.abs, y.abs - dy.abs].all? { |coord| coord.abs == 2 }
   end
 
 
