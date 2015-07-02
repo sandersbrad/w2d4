@@ -52,7 +52,7 @@ class Board
       end
     end
   end
-end
 
-board = Board.new
-board.inspect
+  def on_board?(pos)
+    pos.all? {|coord| coord.between?(0, grid.length - 1)}
+end
