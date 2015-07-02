@@ -20,6 +20,10 @@ class Game
         puts e.message
         sleep(1)
         retry
+      rescue GreatJump => e
+        puts e.message
+        sleep(1)
+        retry
       end
       switch_player
     end
