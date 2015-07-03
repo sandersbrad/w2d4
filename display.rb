@@ -24,7 +24,7 @@ class Display
       move = $stdin.getch
       break if move == "\r"
       unless WASD.keys.include?(move)
-        raise InvalidKey.new "Please use 'a,s,d,w'"
+        raise InvalidMove.new "Please use 'a,s,d,w'"
       end
       delta = WASD[move]
       x, y = cursor

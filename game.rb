@@ -1,6 +1,7 @@
 require_relative 'board'
 require_relative 'player'
 require_relative 'display'
+require_relative 'computerplayer'
 
 
 class Game
@@ -8,7 +9,7 @@ class Game
     @board = Board.new
     @display = Display.new(board)
     @red = Player.new("Brad", :red, board, display)
-    @white = Player.new("Jimmy", :white, board, display)
+    @white = ComputerPlayer.new("Jimmy", :white, board, display)
     @current_player = red
   end
 

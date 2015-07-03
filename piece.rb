@@ -11,12 +11,10 @@ class Piece
   STEPS_WHITE = [[1, 1],
                  [1, -1]]
 
-  attr_reader :color
+  attr_reader :color, :position
 
   def initialize(position, color, board)
-    @board = board
-    @position = position
-    @color = color if color == :white || color == :red
+    @board, @color, @position = board, color, position
     @king = false
   end
 
@@ -55,9 +53,19 @@ class Piece
     valid_jumps.count > 0
   end
 
+  def valid_steps_ai
+    valid_steps
+  end
+
+  def valid_jumps_ai
+    valid_jumps
+  end
+
+
   private
     attr_reader :board
-    attr_accessor :king, :position
+    attr_writer :position
+    attr_accessor :king
 
     def king_yourself
       self.king = true

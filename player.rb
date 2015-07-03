@@ -3,7 +3,7 @@ require_relative 'board'
 require 'byebug'
 
 class Player
-  attr_reader :color, :name, :display, :board
+  attr_reader :name
 
   def initialize(name, color, board, display)
     @name, @color = name, color
@@ -19,5 +19,7 @@ class Player
     board.move(start_pos, end_pos, color)
   end
 
+  private
+    attr_reader :color, :name, :display, :board
 
 end
