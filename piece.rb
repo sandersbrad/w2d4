@@ -61,7 +61,6 @@ class Piece
     valid_jumps
   end
 
-
   private
     attr_reader :board
     attr_writer :position
